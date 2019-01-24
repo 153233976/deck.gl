@@ -113,6 +113,7 @@ export default class TextLayer extends CompositeLayer {
     });
   }
 
+  /* eslint-disable no-loop-func */
   getPickingInfo({info}) {
     return Object.assign(info, {
       // override object with original data
@@ -125,6 +126,7 @@ export default class TextLayer extends CompositeLayer {
     const {iconMapping} = this.state;
 
     const transformedData = [];
+    let objectIndex = 0;
     for (const val of data) {
       const text = getText(val);
       if (text) {
@@ -133,7 +135,16 @@ export default class TextLayer extends CompositeLayer {
         let offsetLeft = 0;
 
         letters.forEach((letter, i) => {
-          const datum = {text: letter, index: i, offsets, len: text.length, object: val};
+          const datum = {
+            text: letter,
+            index: i,
+            offsets,
+            len: text.length,
+            // reference of original object and object index
+            object: val,
+            objectIndex
+          };
+
           const frame = iconMapping[letter];
           if (frame) {
             offsetLeft += frame.width;
@@ -145,10 +156,13 @@ export default class TextLayer extends CompositeLayer {
           transformedData.push(datum);
         });
       }
+
+      objectIndex++;
     }
 
     this.setState({data: transformedData});
   }
+  /* eslint-enable no-loop-func */
 
   getLetterOffset(datum) {
     return datum.offsets[datum.index];

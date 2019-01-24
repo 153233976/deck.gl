@@ -28,13 +28,16 @@ const DEFAULT_GAMMA = 0.2;
 const DEFAULT_BUFFER = 192.0 / 256;
 
 const defaultProps = {
+  highlightColor: {type: 'color', value: [0, 0, 128, 128]},
   getShiftInQueue: {type: 'accessor', value: x => x.shift || 0},
   getLengthOfQueue: {type: 'accessor', value: x => x.len || 1},
   // 1: left, 0: middle, -1: right
   getAnchorX: {type: 'accessor', value: x => x.anchorX || 0},
   // 1: top, 0: center, -1: bottom
   getAnchorY: {type: 'accessor', value: x => x.anchorY || 0},
-  getPixelOffset: {type: 'accessor', value: [0, 0]}
+  getPixelOffset: {type: 'accessor', value: [0, 0]},
+
+  getPickingIndex: {type: 'accessor', value: x => x.objectIndex}
 };
 
 export default class MultiIconLayer extends IconLayer {
@@ -60,13 +63,17 @@ export default class MultiIconLayer extends IconLayer {
 
   updateState(updateParams) {
     super.updateState(updateParams);
-    const {changeFlags} = updateParams;
+    const {oldProps, props, changeFlags} = updateParams;
 
     if (
       changeFlags.updateTriggersChanged &&
       (changeFlags.updateTriggersChanged.getAnchorX || changeFlags.updateTriggersChanged.getAnchorY)
     ) {
       this.getAttributeManager().invalidate('instanceOffsets');
+    }
+
+    if (oldProps.picked !== props.picked) {
+      this.getAttributeManager().invalidate('instancePickingColors');
     }
   }
 
@@ -103,6 +110,21 @@ export default class MultiIconLayer extends IconLayer {
 
       value[i++] = ((getAnchorX(object) - 1) * len) / 2 + rect.width / 2 + shiftX || 0;
       value[i++] = (rect.height / 2) * getAnchorY(object) || 0;
+    }
+  }
+
+  calculateInstancePickingColors(attribute) {
+    const {data, getPickingIndex} = this.props;
+    const {value} = attribute;
+    let i = 0;
+    for (const point of data) {
+      // object with the same pickingIndex will be picked when any one of them is being picked
+      const index = getPickingIndex(point);
+      const pickingColor = this.encodePickingColor(index);
+
+      value[i++] = pickingColor[0];
+      value[i++] = pickingColor[1];
+      value[i++] = pickingColor[2];
     }
   }
 }
