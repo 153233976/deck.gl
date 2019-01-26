@@ -20,7 +20,12 @@
 
 import {CompositeLayer, log} from '@deck.gl/core';
 import MultiIconLayer from './multi-icon-layer/multi-icon-layer';
-import {makeFontAtlas, DEFAULT_CHAR_SET, DEFAULT_FONT_SETTINGS} from './font-atlas';
+import {
+  makeFontAtlas,
+  DEFAULT_CHAR_SET,
+  DEFAULT_FONT_FAMILY,
+  DEFAULT_FONT_SETTINGS
+} from './font-atlas';
 
 const TEXT_ANCHOR = {
   start: 1,
@@ -34,7 +39,6 @@ const ALIGNMENT_BASELINE = {
   bottom: -1
 };
 
-const DEFAULT_FONT_FAMILY = 'Monaco, monospace';
 const DEFAULT_COLOR = [0, 0, 0, 255];
 
 const MISSING_CHAR_WIDTH = 32;
@@ -93,7 +97,11 @@ export default class TextLayer extends CompositeLayer {
   }
 
   fontChanged(oldProps, props) {
-    if (oldProps.fontFamily !== props.fontFamily || oldProps.characterSet !== props.characterSet) {
+    if (
+      oldProps.fontFamily !== props.fontFamily ||
+      oldProps.characterSet !== props.characterSet ||
+      oldProps.fontSettings !== props.fontSettings
+    ) {
       return true;
     }
 

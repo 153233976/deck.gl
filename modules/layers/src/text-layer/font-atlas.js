@@ -22,8 +22,6 @@ export const DEFAULT_CHAR_SET = getDefaultCharacterSet();
 export const DEFAULT_FONT_FAMILY = 'Monaco, monospace';
 
 export const DEFAULT_FONT_SETTINGS = {
-  characterSet: DEFAULT_CHAR_SET,
-  fontFamily: DEFAULT_FONT_FAMILY,
   fontSize: 64,
   buffer: 2,
   sdf: false,
