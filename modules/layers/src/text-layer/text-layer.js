@@ -113,7 +113,6 @@ export default class TextLayer extends CompositeLayer {
     });
   }
 
-  /* eslint-disable no-loop-func */
   getPickingInfo({info}) {
     return Object.assign(info, {
       // override object with original data
@@ -121,6 +120,7 @@ export default class TextLayer extends CompositeLayer {
     });
   }
 
+  /* eslint-disable no-loop-func */
   transformStringToLetters() {
     const {data, getText} = this.props;
     const {iconMapping} = this.state;

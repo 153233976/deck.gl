@@ -28,7 +28,6 @@ const DEFAULT_GAMMA = 0.2;
 const DEFAULT_BUFFER = 192.0 / 256;
 
 const defaultProps = {
-  highlightColor: {type: 'color', value: [0, 0, 128, 128]},
   getShiftInQueue: {type: 'accessor', value: x => x.shift || 0},
   getLengthOfQueue: {type: 'accessor', value: x => x.len || 1},
   // 1: left, 0: middle, -1: right
@@ -37,6 +36,7 @@ const defaultProps = {
   getAnchorY: {type: 'accessor', value: x => x.anchorY || 0},
   getPixelOffset: {type: 'accessor', value: [0, 0]},
 
+  // object with the same pickingIndex will be picked when any one of them is being picked
   getPickingIndex: {type: 'accessor', value: x => x.objectIndex}
 };
 
@@ -63,17 +63,13 @@ export default class MultiIconLayer extends IconLayer {
 
   updateState(updateParams) {
     super.updateState(updateParams);
-    const {oldProps, props, changeFlags} = updateParams;
+    const {changeFlags} = updateParams;
 
     if (
       changeFlags.updateTriggersChanged &&
       (changeFlags.updateTriggersChanged.getAnchorX || changeFlags.updateTriggersChanged.getAnchorY)
     ) {
       this.getAttributeManager().invalidate('instanceOffsets');
-    }
-
-    if (oldProps.picked !== props.picked) {
-      this.getAttributeManager().invalidate('instancePickingColors');
     }
   }
 
@@ -118,7 +114,6 @@ export default class MultiIconLayer extends IconLayer {
     const {value} = attribute;
     let i = 0;
     for (const point of data) {
-      // object with the same pickingIndex will be picked when any one of them is being picked
       const index = getPickingIndex(point);
       const pickingColor = this.encodePickingColor(index);
 
