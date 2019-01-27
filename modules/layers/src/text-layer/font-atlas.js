@@ -37,8 +37,8 @@ function populateAlphaChannel(alphaChannel, imageData) {
   }
 }
 
-function setTextStyle(ctx, fontFamily, fontSize) {
-  ctx.font = `${fontSize}px ${fontFamily}`;
+function setTextStyle(ctx, fontFamily, fontSize, fontWeight) {
+  ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
   ctx.fillStyle = '#000';
   ctx.textBaseline = 'baseline';
   ctx.textAlign = 'left';
@@ -79,18 +79,18 @@ export function makeFontAtlas(gl, fontSettings) {
     fontFamily,
     characterSet,
     fontSize,
+    fontWeight,
     buffer,
     sdf,
     radius,
-    cutoff,
-    fontWeight
+    cutoff
   } = mergedFontSettings;
 
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
   // build mapping
-  setTextStyle(ctx, fontFamily, fontSize);
+  setTextStyle(ctx, fontFamily, fontSize, fontWeight);
   const fontHeight = fontSize * HEIGHT_SCALE;
   const {canvasHeight, mapping} = buildMapping({
     ctx,
@@ -102,12 +102,11 @@ export function makeFontAtlas(gl, fontSettings) {
 
   canvas.width = MAX_CANVAS_WIDTH;
   canvas.height = canvasHeight;
-  setTextStyle(ctx, fontFamily, fontSize);
+  setTextStyle(ctx, fontFamily, fontSize, fontWeight);
 
   // layout characters
   if (sdf) {
     const tinySDF = new TinySDF(fontSize, buffer, radius, cutoff, fontFamily, fontWeight);
-    setTextStyle(tinySDF.ctx, fontFamily, fontSize);
     // used to store distance values from tinySDF
     const imageData = ctx.createImageData(tinySDF.size, tinySDF.size);
 

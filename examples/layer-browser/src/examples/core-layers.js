@@ -427,12 +427,37 @@ const TextLayerExample = {
       value: ['Monaco', 'Helvetica', 'Garamond', 'Palatino', 'Courier', 'Courier New']
     },
     // , 'buffer', 'sdf', 'radius', 'cutoff', 'fontWeight'
-    fontSettings: {type: 'compound', elements: ['fontSize', 'buffer', 'sdf', 'radius', 'cutoff']},
+    fontSettings: {
+      type: 'compound',
+      elements: ['fontSize', 'fontWeight', 'buffer', 'sdf', 'radius', 'cutoff']
+    },
     fontSize: {
       type: 'number',
       max: 100,
       onUpdate: (newValue, newSettings, change) => {
         change('fontSettings', {...newSettings.fontSettings, fontSize: newValue});
+      }
+    },
+    fontWeight: {
+      type: 'category',
+      max: 100,
+      value: [
+        'normal',
+        'bold',
+        'bolder',
+        'lighter',
+        '100',
+        '200',
+        '300',
+        '400',
+        '500',
+        '600',
+        '700',
+        '800',
+        '900'
+      ],
+      onUpdate: (newValue, newSettings, change) => {
+        change('fontSettings', {...newSettings.fontSettings, fontWeight: newValue});
       }
     },
     buffer: {

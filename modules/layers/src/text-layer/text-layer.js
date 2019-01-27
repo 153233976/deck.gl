@@ -42,7 +42,7 @@ const ALIGNMENT_BASELINE = {
 const DEFAULT_COLOR = [0, 0, 0, 255];
 
 const MISSING_CHAR_WIDTH = 32;
-const fontSettingProps = ['fontSize', 'buffer', 'sdf', 'radius', 'cutoff', 'fontWeight'];
+const FONT_SETTINGS_PROPS = ['fontSize', 'buffer', 'fontWeight', 'sdf', 'radius', 'cutoff'];
 
 const defaultProps = {
   fp64: false,
@@ -108,7 +108,7 @@ export default class TextLayer extends CompositeLayer {
     const oldFontSettings = oldProps.fontSettings || {};
     const fontSettings = props.fontSettings || {};
 
-    return !fontSettingProps.every(prop => oldFontSettings[prop] === fontSettings[prop]);
+    return !FONT_SETTINGS_PROPS.every(prop => oldFontSettings[prop] === fontSettings[prop]);
   }
 
   getPickingInfo({info}) {
