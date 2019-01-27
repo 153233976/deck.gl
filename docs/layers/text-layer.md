@@ -78,23 +78,23 @@ Specifies a prioritized list of one or more font family names and/or generic fam
 
 Specifies a list of characters to include in the font. By default, only characters in the Ascii code range 32-128 are included. Use this prop if you need to display special characters.
 
+##### `fontWeight` (Number | String, optional)
+
+* Default is `normal`.
+
+css `font-weight`.
+
 ##### `fontSettings` (Object, optional)
 
 Advance options for fine tuning the appearance and performance of the generated shared `fontAtlas`.
 
-`TextLayer` also supports [`sdf` (Signed Distance Fields)](http://cs.brown.edu/people/pfelzens/papers/dt-final.pdf),
-which will provide a sharper look when rendering with very large or small font sizes. `TextLayer` integrates 
-with [`TinySDF`](https://github.com/mapbox/tiny-sdf) which implements the `sdf` algorithm. You can enable `sdf` by 
-setting `sdf` to true.
-
 Options:
 
-* `fontSize` (Number): Font size in pixels. Default is `64`. This option is only applied for generating `fontAtlas`, it does not impact the size of displayed text labels.
-* `fontWeight` (Number|String): css `font-weight`. Default is `normal`.
-* `buffer` (Number): Whitespace buffer around each side of the character. Default is `2`.
-* `sdf` (Boolean): Flag to enable / disable `sdf`. Default is `false`.
-* `radius` (Number): How many pixels around the glyph shape to use for encoding distance. Default is `3`.
-* `cutoff` (Number): How much of the radius (relative) is used for the inside part the glyph. Default is `0.25`.
+* `fontSize` (Number): Font size in pixels. Default is `64`. This option is only applied for generating `fontAtlas`, it does not impact the size of displayed text labels. Larger `fontSize` will give you a sharper look when rendering text labels with very large font sizes. But larger `fontSize` requires more time and space to generate the `fontAtlas`.
+* `buffer` (Number): Whitespace buffer around each side of the character. Default is `2`. In general, bigger `fontSize` requires bigger `buffer`. Increase `buffer` will add more space between each character when layout `characterSet` in `fontAtlas`. This option could be tuned to provide sufficient space for drawing each character and avoiding overlapping of neighboring characters. But the cost of bigger `buffer` is more time and space to generate `fontAtlas`.
+* `sdf` (Boolean): Flag to enable / disable `sdf`. Default is `false`. [`sdf` (Signed Distance Fields)](http://cs.brown.edu/people/pfelzens/papers/dt-final.pdf) will provide a sharper look when rendering with very large or small font sizes. `TextLayer` integrates with [`TinySDF`](https://github.com/mapbox/tiny-sdf) which implements the `sdf` algorithm.
+* `radius` (Number): How many pixels around the glyph shape to use for encoding distance. Default is `3`. Bigger radius can have more halo effect.
+* `cutoff` (Number): How much of the radius (relative) is used for the inside part the glyph. Default is `0.25`. Bigger `cutoff` makes character thinner. Smaller `cutoff` makes character look thicker.
 
 `radius` and `cutoff` will be applied only when `sdf` enabled.
 

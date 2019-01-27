@@ -20,14 +20,14 @@ function getDefaultCharacterSet() {
 
 export const DEFAULT_CHAR_SET = getDefaultCharacterSet();
 export const DEFAULT_FONT_FAMILY = 'Monaco, monospace';
+export const DEFAULT_FONT_WEIGHT = 'normal';
 
 export const DEFAULT_FONT_SETTINGS = {
   fontSize: 64,
   buffer: 2,
   sdf: false,
   cutoff: 0.25,
-  radius: 3,
-  fontWeight: 'normal'
+  radius: 3
 };
 
 function populateAlphaChannel(alphaChannel, imageData) {
@@ -54,7 +54,7 @@ function buildMapping({ctx, fontHeight, buffer, characterSet, maxCanvasWidth}) {
     // https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics
     const {width} = ctx.measureText(char);
 
-    if (x + width > maxCanvasWidth) {
+    if (x + width + buffer * 2 > maxCanvasWidth) {
       x = 0;
       row++;
     }
@@ -74,12 +74,21 @@ function buildMapping({ctx, fontHeight, buffer, characterSet, maxCanvasWidth}) {
 }
 
 export function makeFontAtlas(gl, fontSettings) {
-  const mergedFontSettings = Object.assign({}, DEFAULT_FONT_SETTINGS, fontSettings);
+  const mergedFontSettings = Object.assign(
+    {
+      fontFamily: DEFAULT_FONT_FAMILY,
+      fontWeight: DEFAULT_FONT_WEIGHT,
+      characterSet: DEFAULT_CHAR_SET
+    },
+    DEFAULT_FONT_SETTINGS,
+    fontSettings
+  );
+
   const {
     fontFamily,
+    fontWeight,
     characterSet,
     fontSize,
-    fontWeight,
     buffer,
     sdf,
     radius,

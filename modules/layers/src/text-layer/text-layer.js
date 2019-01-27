@@ -24,6 +24,7 @@ import {
   makeFontAtlas,
   DEFAULT_CHAR_SET,
   DEFAULT_FONT_FAMILY,
+  DEFAULT_FONT_WEIGHT,
   DEFAULT_FONT_SETTINGS
 } from './font-atlas';
 
@@ -42,7 +43,7 @@ const ALIGNMENT_BASELINE = {
 const DEFAULT_COLOR = [0, 0, 0, 255];
 
 const MISSING_CHAR_WIDTH = 32;
-const FONT_SETTINGS_PROPS = ['fontSize', 'buffer', 'fontWeight', 'sdf', 'radius', 'cutoff'];
+const FONT_SETTINGS_PROPS = ['fontSize', 'buffer', 'sdf', 'radius', 'cutoff'];
 
 const defaultProps = {
   fp64: false,
@@ -50,6 +51,7 @@ const defaultProps = {
 
   characterSet: DEFAULT_CHAR_SET,
   fontFamily: DEFAULT_FONT_FAMILY,
+  fontWeight: DEFAULT_FONT_WEIGHT,
   fontSettings: {},
 
   getText: {type: 'accessor', value: x => x.text},
@@ -81,10 +83,11 @@ export default class TextLayer extends CompositeLayer {
 
   updateFontAtlas() {
     const {gl} = this.context;
-    const {fontSettings, fontFamily, characterSet} = this.props;
+    const {fontSettings, fontFamily, fontWeight, characterSet} = this.props;
 
     const mergedFontSettings = Object.assign({}, DEFAULT_FONT_SETTINGS, fontSettings, {
       fontFamily,
+      fontWeight,
       characterSet
     });
     const {scale, mapping, texture} = makeFontAtlas(gl, mergedFontSettings);
@@ -100,7 +103,7 @@ export default class TextLayer extends CompositeLayer {
     if (
       oldProps.fontFamily !== props.fontFamily ||
       oldProps.characterSet !== props.characterSet ||
-      oldProps.fontSettings !== props.fontSettings
+      oldProps.fontWeight !== props.fontWeight
     ) {
       return true;
     }
